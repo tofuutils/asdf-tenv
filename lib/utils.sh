@@ -113,10 +113,11 @@ install_version() {
 }
 
 verify() {
-	local -r version="${1}"
-	local -r download_path="${2}"
-	local -r checksum_file="${TOOL_BIN_NAME}_${version}_checksums.txt"
-
-	baseURL="${GH_REPO}/releases/download/v${version}"
-	local files=("$checksum_file")
+# TODO
+#	local -r version="${1}"
+#	local -r download_path="${2}"
+#	local -r checksum_file="${TOOL_BIN_NAME}_${version}_checksums.txt"
+#
+#	baseURL="${GH_REPO}/releases/download/v${version}"
+#	local files=("$checksum_file")
 }
