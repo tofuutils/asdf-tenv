@@ -55,7 +55,7 @@ get_arch() {
 	elif [[ ${machine} == *"386"* ]]; then
 		echo "386"
 	else
-		echo "amd64"
+		echo "x86_64"
 	fi
 }
 
