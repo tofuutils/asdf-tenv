@@ -1,0 +1,35 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  plugin_test:
+    name: asdf plugin test
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - macos-14
+        cosign:
+          - true
+          - false
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Install Cosign
+        if: ${{ matrix.cosign }}
+        uses: sigstore/cosign-installer@v3
+
+      - name: Get Cosign version
+        if: ${{ matrix.cosign }}
+        run: cosign version
+
+      - name: Plugin test
+        uses: asdf-vm/actions/plugin-test@v3
+        with:
+          command: tenv version
