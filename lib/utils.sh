@@ -39,9 +39,9 @@ list_all_versions() {
 get_platform() {
 	local -r kernel="$(uname -s)"
 	if [[ ${OSTYPE} == "msys" || ${kernel} == "CYGWIN"* || ${kernel} == "MINGW"* ]]; then
-		echo windows
+		echo Windows
 	else
-		uname | tr '[:upper:]' '[:lower:]'
+		uname
 	fi
 }
 
@@ -70,10 +70,10 @@ download_release() {
 	local -r platform="$(get_platform)"
 	local -r arch="$(get_arch)"
 
-	url="$GH_REPO/releases/download/v${version}/${TOOL_BIN_NAME}_${version}_${platform}_${arch}.tar.gz"
+	url="$GH_REPO/releases/download/v${version}/${TOOL_BIN_NAME}_v${version}_${platform}_${arch}.tar.gz"
 
-	echo "* Downloading $TOOL_NAME release v$version..."
-	curl "${curl_opts[@]}" -o "$filename" -C - "${url}" || fail "Could not download ${url}"
+	echo "* Downloading ${TOOL_NAME} release v${version}..."
+	curl "${curl_opts[@]}" -o "${filename}" -C - "${url}" || fail "Could not download ${url}"
 
 	#  Extract contents of zip file into the download directory
 	tar -xzf "${filename}" -C "${ASDF_DOWNLOAD_PATH}" || fail "Could not extract ${filename}"
@@ -108,34 +108,15 @@ install_version() {
 		rm "$(get_release_file)"
 	) || (
 		rm -rf "$install_path"
-		fail "An error occurred while installing $TOOL_NAME $version."
+		fail "An error occurred while installing ${TOOL_NAME} ${version}."
 	)
 }
 
 verify() {
-	local -r version="$1"
-	local -r download_path="$2"
-	local -r checksum_file="${TOOL_BIN_NAME}_${version}_SHA256SUMS"
-	local -r signature_file="${checksum_file}.sig"
-	local -r cert_file="${checksum_file}.pem"
-	local -r cert_identity="https://github\.com/tofuutils/tenv/\.github/workflows/release\.yml@refs/(heads|tags)/(main|v1\..+)"
-	local -r cert_oidc_issuer="https://token.actions.githubusercontent.com"
+	local -r version="${1}"
+	local -r download_path="${2}"
+	local -r checksum_file="${TOOL_BIN_NAME}_${version}_checksums.txt"
 
-	baseURL="$GH_REPO/releases/download/v${version}"
-	local files=("$checksum_file" "$signature_file" "$cert_file")
-	echo "* Downloading signature files ..."
-	for file in "${files[@]}"; do
-		curl "${curl_opts[@]}" -o "${download_path}/${file}" "${baseURL}/${file}" || fail "Could not download ${baseURL}/${file}"
-	done
-
-	if ! (
-		cosign verify-blob --signature "${download_path}/${signature_file}" \
-			--certificate "${download_path}/${cert_file}" \
-			--certificate-identity-regexp="${cert_identity}" \
-			--certificate-oidc-issuer="${cert_oidc_issuer}" \
-			"${download_path}/${checksum_file}"
-	); then
-		echo "signature verification failed" >&2
-		return 1
-	fi
+	baseURL="${GH_REPO}/releases/download/v${version}"
+	local files=("$checksum_file")
 }
