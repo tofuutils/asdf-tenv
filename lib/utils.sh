@@ -113,6 +113,7 @@ install_version() {
 }
 
 verify() {
+	echo "TBD"
 # TODO
 #	local -r version="${1}"
 #	local -r download_path="${2}"
