@@ -60,23 +60,24 @@ get_arch() {
 }
 
 get_release_file() {
-	echo "${ASDF_DOWNLOAD_PATH}/${TOOL_NAME}-${ASDF_INSTALL_VERSION}.zip"
+	echo "${ASDF_DOWNLOAD_PATH}/${TOOL_NAME}-${ASDF_INSTALL_VERSION}.tar.gz"
 }
 
 download_release() {
 	local version filename url
-	version="$1"
+	version="${1}"
 	local -r filename="$(get_release_file)"
 	local -r platform="$(get_platform)"
 	local -r arch="$(get_arch)"
 
-	url="$GH_REPO/releases/download/v${version}/${TOOL_BIN_NAME}_${version}_${platform}_${arch}.zip"
+	url="$GH_REPO/releases/download/v${version}/${TOOL_BIN_NAME}_${version}_${platform}_${arch}.tar.gz"
 
 	echo "* Downloading $TOOL_NAME release v$version..."
-	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
+	curl "${curl_opts[@]}" -o "$filename" -C - "${url}" || fail "Could not download ${url}"
 
 	#  Extract contents of zip file into the download directory
-	unzip -qq "$filename" -d "$ASDF_DOWNLOAD_PATH" || fail "Could not extract $filename"
+	tar -xzf "${filename}" -C "${ASDF_DOWNLOAD_PATH}" || fail "Could not extract ${filename}"
+
 }
 
 install_version() {
