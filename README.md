@@ -51,7 +51,7 @@
 ## plugin
 
 ```shell
-asdf plugin add tenv
+asdf plugin add tenv https://github.com/tofuutils/asdf-tenv
 ```
 
 ## tenv
