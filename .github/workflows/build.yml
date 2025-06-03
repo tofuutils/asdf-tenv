@@ -23,13 +23,13 @@ jobs:
     steps:
       - name: Install Cosign
         if: ${{ matrix.cosign }}
-        uses: sigstore/cosign-installer@v3
+        uses: sigstore/cosign-installer@3454372f43399081ed03b604cb2d021dabca52bb # ratchet:sigstore/cosign-installer@v3
 
       - name: Get Cosign version
         if: ${{ matrix.cosign }}
         run: cosign version
 
       - name: Plugin test
-        uses: asdf-vm/actions/plugin-test@v3
+        uses: asdf-vm/actions/plugin-test@05e0d2ed97b598bfce82fd30daf324ae0c4570e6 # ratchet:asdf-vm/actions/plugin-test@v3
         with:
           command: tenv version
