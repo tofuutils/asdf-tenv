@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Install Cosign
         if: ${{ matrix.cosign }}
-        uses: sigstore/cosign-installer@3454372f43399081ed03b604cb2d021dabca52bb # ratchet:sigstore/cosign-installer@v3
+        uses: sigstore/cosign-installer@fb28c2b6339dcd94da6e4cbcbc5e888961f6f8c3 # ratchet:sigstore/cosign-installer@v3
 
       - name: Get Cosign version
         if: ${{ matrix.cosign }}
