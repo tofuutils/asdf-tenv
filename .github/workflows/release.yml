@@ -13,6 +13,6 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - uses: GoogleCloudPlatform/release-please-action@a02a34c4d625f9be7cb89156071d8567266a2445 # ratchet:GoogleCloudPlatform/release-please-action@v4
+      - uses: GoogleCloudPlatform/release-please-action@16a9c90856f42705d54a6fda1823352bdc62cf38 # ratchet:GoogleCloudPlatform/release-please-action@v4
         with:
           release-type: simple
